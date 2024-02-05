@@ -5,13 +5,7 @@ class Role(Enum):
     ADMIN = "admin"
     COOK = "cook"
     waiter = "waiter"
-
-
-class Category(Enum):
-    MAIN_COURSE = "main_course"
-    SOUP = "soup"
-    DESSERT = "dessert"
-    DRINK = "drink"
+    CLIENT = "client"
 
 
 class Status(Enum):
