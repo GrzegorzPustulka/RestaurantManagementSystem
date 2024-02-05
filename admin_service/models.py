@@ -10,7 +10,7 @@ from uuid import UUID
 import uuid
 from datetime import datetime
 
-from admin_service.models_choices import Category, Status, Role
+from admin_service.models_choices import Status, Role
 
 
 class Base(DeclarativeBase):
@@ -27,18 +27,27 @@ class Base(DeclarativeBase):
 
 
 class Users(Base):
-    name: Mapped[str] = mapped_column(String(50), nullable=False)
-    surname: Mapped[str] = mapped_column(String(50), nullable=False)
-    phone: Mapped[str] = mapped_column(String(15), nullable=False)
-    email: Mapped[str] = mapped_column(String(100), nullable=False)
+    email: Mapped[str] = mapped_column(String(100))
     password: Mapped[str]
-    address_id: Mapped[UUID] = mapped_column(ForeignKey("address.id"))
+    role: Mapped[Role]
 
     orders: Mapped["Orders"] = relationship(back_populates="users")
-    address: Mapped["Address"] = relationship(back_populates="users")
+    details: Mapped["UsersDetails"] = relationship(back_populates="users")
 
     def __repr__(self):
-        return f"User(id={self.id!r}, name={self.name!r}, surname={self.surname!r}, phone={self.phone!r}, email={self.email!r}, password={self.password!r}, address_id={self.address_id!r})"
+        return f"Users(id={self.id!r}, email={self.email!r}, role={self.role!r})"
+
+
+class UsersDetails(Base):
+    name: Mapped[str] = mapped_column(String(50))
+    surname: Mapped[str] = mapped_column(String(50))
+    phone: Mapped[str | None] = mapped_column(String(15))
+
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
+    address_id: Mapped[UUID] = mapped_column(ForeignKey("address.id"))
+
+    users: Mapped["Users"] = relationship(back_populates="details")
+    address: Mapped["Address"] = relationship(back_populates="users")
 
 
 class Address(Base):
@@ -50,7 +59,6 @@ class Address(Base):
     country: Mapped[str] = mapped_column(String(100))
 
     users: Mapped["Users"] = relationship(back_populates="address")
-    employees: Mapped["Employees"] = relationship(back_populates="address")
     suppliers: Mapped["Suppliers"] = relationship(back_populates="address")
 
     def __repr__(self):
@@ -61,12 +69,21 @@ class Menu(Base):
     name: Mapped[str]
     description: Mapped[str | None]
     price: Mapped[float]
-    category: Mapped[Category]
+    category_id: Mapped[UUID] = mapped_column(ForeignKey("category.id"))
 
     order_details: Mapped["OrderDetails"] = relationship(back_populates="menu")
+    category: Mapped["Category"] = relationship(back_populates="menu")
 
     def __repr__(self):
-        return f"Menu(id={self.id!r}, name={self.name!r}, description={self.description!r}, price={self.price!r}, category={self.category!r})"
+        return f"Menu(id={self.id!r}, name={self.name!r}, description={self.description!r}, price={self.price!r}, category_id={self.category_id!r})"
+
+
+class Category(Base):
+    name: Mapped[str]
+    menu: Mapped["Menu"] = relationship(back_populates="category")
+
+    def __repr__(self):
+        return f"Category(id={self.id!r}, name={self.name!r})"
 
 
 class Orders(Base):
@@ -103,20 +120,6 @@ class Inventory(Base):
 
     def __repr__(self):
         return f"Inventory(id={self.id!r}, name={self.name!r}, quantity={self.quantity!r}, supplier_id={self.supplier_id!r})"
-
-
-class Employees(Base):
-    name: Mapped[str] = mapped_column(String(50))
-    surname: Mapped[str] = mapped_column(String(50))
-    phone: Mapped[str] = mapped_column(String(15))
-    email: Mapped[str] = mapped_column(String(100))
-    role: Mapped[Role]
-    address_id: Mapped[UUID] = mapped_column(ForeignKey("address.id"))
-
-    address: Mapped["Address"] = relationship(back_populates="employees")
-
-    def __repr__(self):
-        return f"Employees(id={self.id!r}, name={self.name!r}, surname={self.surname!r}, phone={self.phone!r}, email={self.email!r}, role={self.role!r}, address_id={self.address_id!r})"
 
 
 class Suppliers(Base):
