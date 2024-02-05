@@ -1,5 +1,3 @@
-from sqlalchemy.orm import Session
-
 from admin_service.models import Menu
 from admin_service.schemas.menu import MenuCreate, MenuUpdate
 

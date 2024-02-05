@@ -1,6 +1,8 @@
 from typing import Generic, Type, TypeVar
+
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+
 from admin_service.models import Base
 
 ModelType = TypeVar("ModelType", bound=Base)
@@ -26,7 +28,9 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.refresh(db_obj)
         return db_obj
 
-    def update(self, db: Session, id: str, obj_in: UpdateSchemaType) -> ModelType | None:
+    def update(
+        self, db: Session, id: str, obj_in: UpdateSchemaType
+    ) -> ModelType | None:
         db_obj = self.get(db=db, id=id)
         if not db_obj:
             return None

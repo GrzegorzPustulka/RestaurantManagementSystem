@@ -1,16 +1,17 @@
-from sqlalchemy import String, Integer, ForeignKey
+import uuid
+from datetime import datetime
+from uuid import UUID
+
+from sqlalchemy import ForeignKey, Integer, String
 from sqlalchemy.orm import (
     DeclarativeBase,
-    declared_attr,
     Mapped,
+    declared_attr,
     mapped_column,
     relationship,
 )
-from uuid import UUID
-import uuid
-from datetime import datetime
 
-from admin_service.models_choices import Status, Role
+from admin_service.models_choices import Role, Status
 
 
 class Base(DeclarativeBase):
@@ -58,7 +59,7 @@ class Address(Base):
     postal_code: Mapped[str] = mapped_column(String(6))
     country: Mapped[str] = mapped_column(String(100))
 
-    users: Mapped["Users"] = relationship(back_populates="address")
+    users: Mapped["UsersDetails"] = relationship(back_populates="address")
     suppliers: Mapped["Suppliers"] = relationship(back_populates="address")
 
     def __repr__(self):

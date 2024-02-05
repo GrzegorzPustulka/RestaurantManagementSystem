@@ -1,14 +1,13 @@
 from uuid import UUID
 
 from pydantic import BaseModel, field_validator
-from admin_service.models_choices import Category
 
 
 class MenuBase(BaseModel):
     name: str
     description: str | None
     price: float
-    category: Category
+    category_id: UUID
 
 
 class MenuCreate(MenuBase):
