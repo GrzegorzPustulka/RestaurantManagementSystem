@@ -26,6 +26,9 @@ class Base(DeclarativeBase):
             "_"
         )
 
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 
 class Users(Base):
     email: Mapped[str] = mapped_column(String(100))
@@ -49,6 +52,9 @@ class UsersDetails(Base):
 
     users: Mapped["Users"] = relationship(back_populates="details")
     address: Mapped["Address"] = relationship(back_populates="users")
+
+    def __repr__(self):
+        return f"UsersDetails(id={self.id!r}, user_id={self.user_id!r}, address_id={self.address_id!r}, name={self.name!r}, surname={self.surname!r}, phone={self.phone!r})"
 
 
 class Address(Base):
