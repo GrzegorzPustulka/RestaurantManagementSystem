@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from admin_service.crud.menu import menu as crud_menu
-from admin_service.schemas.menu import MenuCreate, MenuRead, MenuUpdate
+from admin_service.schemas.external.menu import MenuCreate, MenuRead, MenuUpdate
 
-from ..deps import get_db
+from admin_service.api.deps import get_db
 
 router = APIRouter(prefix="/menu", tags=["menu"])
 

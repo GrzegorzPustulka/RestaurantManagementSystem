@@ -2,7 +2,7 @@ import bcrypt
 from sqlalchemy.orm import Session
 
 from admin_service.models import Address, Users, UsersDetails
-from admin_service.schemas.employee import EmployeeCreate
+from admin_service.schemas.external.employee import EmployeeCreate
 
 from .base import CRUDBase
 

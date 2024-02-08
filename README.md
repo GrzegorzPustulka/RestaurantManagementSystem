@@ -1,6 +1,25 @@
 # DineStream
 
-DESCRIPTION
+Service for managing a restaurant. It allows you to manage the menu, employees, and categories.
+
+## links to the app
+
+<b>Admin Service:</b>
+- [swagger](https://adminservice-production.up.railway.app/docs)
+- [redoc](https://adminservice-production.up.railway.app/redoc)
+
+<b>Customer Service</b>
+- future link
+
+<b>Kitchen Service</b>
+- future link
+
+<b>Restaurant Service</b>
+- future link
+
+<b>E-mail Sender Service</b>
+- future link
+
 
 ## Installation
 ```bash
@@ -8,7 +27,7 @@ git clone "https://github.com/GrzegorzPustulka/admin_service.git"
 cd admin_service
 pip install poetry
 poetry shell
-uvicorn admin_service.main:app
+hypercorn admin_service.main:app --reload
 ```
 
 ## Functionalities
@@ -23,6 +42,6 @@ uvicorn admin_service.main:app
 docker run -d -p 1025:1025 -p 8025:8025 --name mailhog mailhog/mailhog
 ```
 
-```http request
+```http
 http://localhost:8025
 ```

@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from pydantic import BaseModel, EmailStr, SecretStr
+from pydantic import BaseModel, EmailStr
 from admin_service.models_choices import Role
 
 
