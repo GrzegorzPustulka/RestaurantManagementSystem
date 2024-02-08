@@ -1,5 +1,5 @@
 from admin_service.models import Menu
-from admin_service.schemas.menu import MenuCreate, MenuUpdate
+from admin_service.schemas.external.menu import MenuCreate, MenuUpdate
 
 from .base import CRUDBase
 

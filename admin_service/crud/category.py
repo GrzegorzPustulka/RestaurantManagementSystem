@@ -1,5 +1,5 @@
 from admin_service.models import Category
-from admin_service.schemas.category import CategoryCreate, CategoryUpdate
+from admin_service.schemas.external.category import CategoryCreate, CategoryUpdate
 
 from .base import CRUDBase
 
