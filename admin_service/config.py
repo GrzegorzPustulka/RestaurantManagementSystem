@@ -8,15 +8,15 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file_encoding="utf-8")
 
     # DATABASE
-    db_user: str = "postgres"
-    db_password: SecretStr = SecretStr("SecretPassword_1!")
-    db_host: str = "localhost"
-    db_port: str = "5432"
-    db_name: str = "DineStream"
+    POSTGRES_USER: str = "postgres"
+    PGPASSWORD: SecretStr = SecretStr("SecretPassword_1!")
+    PGHOST: str = "localhost"
+    PGPORT: str = "5432"
+    PGDATABASE: str = "DineStream"
 
     @property
     def sqlalchemy_database_uri(self) -> PostgresDsn:
-        return f"postgresql://{self.db_user}:{self.db_password.get_secret_value()}@{self.db_host}:{self.db_port}/{self.db_name}"
+        return f"postgresql://{self.POSTGRES_USER}:{self.PGPASSWORD.get_secret_value()}@{self.PGHOST}:{self.PGPORT}/{self.PGDATABASE}"
 
     # SMTP
     smtp_server: str = "localhost"
