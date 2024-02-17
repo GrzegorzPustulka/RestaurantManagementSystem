@@ -1,6 +1,8 @@
-import pika
-from admin_service.config import settings
 import json
+
+import pika
+
+from admin_service.core.config import settings
 from admin_service.models_choices import EmailSubject
 
 

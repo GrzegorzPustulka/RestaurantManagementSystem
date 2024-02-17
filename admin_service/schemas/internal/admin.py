@@ -1,12 +1,12 @@
 from pydantic import BaseModel, EmailStr
-from typing import Literal
+
 from admin_service.models_choices import Role
 
 
 class AdminCreate(BaseModel):
     email: EmailStr
     password: str
-    role: Literal["ADMIN"] = "ADMIN"
+    role: str = Role.ADMIN
     name: str
     surname: str
     phone: str

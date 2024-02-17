@@ -1,12 +1,12 @@
 from http.client import HTTPException
 
-from fastapi import FastAPI, Request, HTTPException, status
+from fastapi import FastAPI, HTTPException, Request, status
 
+from admin_service.api.external.auth import router as auth_router
 from admin_service.api.external.category import router as category_router
 from admin_service.api.external.employee import router as employee_router
 from admin_service.api.external.menu import router as menu_router
-
-from admin_service.api.internal.auth import router as auth_router
+from admin_service.api.internal.auth import router as internal_auth_router
 
 app = FastAPI(
     title="Admin Service",
@@ -18,6 +18,7 @@ app.include_router(menu_router)
 app.include_router(category_router)
 app.include_router(employee_router)
 app.include_router(auth_router)
+app.include_router(internal_auth_router)
 
 
 @app.middleware("http")
@@ -29,10 +30,3 @@ async def filter_requests(request: Request, call_next):
             )
     response = await call_next(request)
     return response
-
-
-@app.get("/")
-async def root():
-    return {
-        "message": "Welcome to the Admin Service! Please use the provided API documentation to interact with the service."
-    }

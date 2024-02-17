@@ -1,23 +1,20 @@
 import bcrypt
 from sqlalchemy.orm import Session
 
+from admin_service.core.security import get_password_hash
 from admin_service.models import Address, Users, UsersDetails
-from admin_service.schemas.external.employee import EmployeeCreate
+from admin_service.schemas.external.user import UserCreate, UserUpdate
 
 from .base import CRUDBase
 
 
-class CRUDMenu(CRUDBase[Users, EmployeeCreate, EmployeeCreate]):
+class CRUDUser(CRUDBase[Users, UserCreate, UserUpdate]):
     @staticmethod
     def get_by_email(db: Session, email: str) -> Users | None:
         return db.query(Users).filter(Users.email == email).one_or_none()
 
-    def create(
-        self, db: Session, obj_in: EmployeeCreate
-    ) -> [Users, UsersDetails, Address]:
-        hashed_password = bcrypt.hashpw(
-            obj_in.password.encode("utf-8"), bcrypt.gensalt()
-        )
+    def create(self, db: Session, obj_in: UserCreate) -> [Users, UsersDetails, Address]:
+        hashed_password = get_password_hash(obj_in.password)
         user = Users(
             email=obj_in.email,
             password=hashed_password,
@@ -50,4 +47,4 @@ class CRUDMenu(CRUDBase[Users, EmployeeCreate, EmployeeCreate]):
         return user, user_details, address
 
 
-employee = CRUDMenu(Users)
+user = CRUDUser(Users)
