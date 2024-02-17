@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-
+from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
+from admin_service.utils.rabbitmq import RabbitMQPublisher
 from admin_service.api.deps import get_db
+from admin_service.models_choices import EmailSubject
 from admin_service.crud.employee import employee as crud_employee
 from admin_service.schemas.external.employee import (
     AddressRead,
@@ -28,6 +29,8 @@ async def create_employee(employee_in: EmployeeCreate, db=Depends(get_db)):
         user_address=AddressRead(**user_address.as_dict()),
     )
 
-    # todo: Send email to the user to confirm the account
+    producer = RabbitMQPublisher()
+    producer.publish(employee_in.email, EmailSubject.first_email)
+    producer.close()
 
     return employee_read
