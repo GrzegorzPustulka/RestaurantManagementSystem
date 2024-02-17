@@ -11,8 +11,6 @@ from sqlalchemy.orm import (
     relationship,
 )
 
-from admin_service.models_choices import Role, Status
-
 
 class Base(DeclarativeBase):
     id: Mapped[UUID] = mapped_column(
@@ -33,7 +31,7 @@ class Base(DeclarativeBase):
 class Users(Base):
     email: Mapped[str] = mapped_column(String(100))
     password: Mapped[str]
-    role: Mapped[Role]
+    role: Mapped[str]
 
     orders: Mapped["Orders"] = relationship(back_populates="users")
     details: Mapped["UsersDetails"] = relationship(back_populates="users")
@@ -95,7 +93,7 @@ class Category(Base):
 
 class Orders(Base):
     date: Mapped[datetime]
-    status: Mapped[Status]
+    status: Mapped[str]
     cost: Mapped[float]
     customer_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
 

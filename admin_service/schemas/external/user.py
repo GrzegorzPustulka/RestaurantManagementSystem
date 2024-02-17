@@ -1,10 +1,11 @@
 from uuid import UUID
 
 from pydantic import BaseModel, EmailStr
+
 from admin_service.models_choices import Role
 
 
-class EmployeeCreate(BaseModel):
+class UserCreate(BaseModel):
     email: EmailStr
     password: str
     role: Role
@@ -19,7 +20,7 @@ class EmployeeCreate(BaseModel):
     country: str
 
 
-class EmployeeUpdate(BaseModel):
+class UserUpdate(BaseModel):
     pass
 
 
