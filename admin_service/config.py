@@ -24,6 +24,14 @@ class Settings(BaseSettings):
     sender_email: str = "test@example.com"
     smtp_password: SecretStr = SecretStr("")
 
+    # RabbitMQ
+    rabbitmq_user: str = "guest"
+    rabbitmq_password: SecretStr = SecretStr("guest")
+    rabbitmq_host: str = "localhost"
+    rabbitmq_port: int = 5672
+    rabbitmq_vhost: str = "/"
+    rabbitmq_queue: str = "email_queue"
+
 
 @lru_cache()
 def get_settings():

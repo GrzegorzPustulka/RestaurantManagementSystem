@@ -45,3 +45,15 @@ docker run -d -p 1025:1025 -p 8025:8025 --name mailhog mailhog/mailhog
 ```http
 http://localhost:8025
 ```
+
+### Local RabbitMQ with docker
+
+```bash
+docker run -d --rm --name rabbitmq -p 5552:5552 -p 5672:5672 -p 15672:15672 -e RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS='-rabbitmq_stream advertised_host localhost' rabbitmq:3.12-management
+```
+ - login: guest
+ - password: guest
+
+```http
+http://localhost:15672
+```

@@ -13,3 +13,8 @@ class Status(Enum):
     IN_PROGRESS = "in_progress"
     READY = "ready"
     DELIVERED = "delivered"
+
+
+class EmailSubject(Enum):
+    first_email = "First email"
+    password_reset = "Password reset"
