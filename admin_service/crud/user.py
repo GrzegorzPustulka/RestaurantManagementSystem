@@ -1,4 +1,5 @@
 import bcrypt
+from sqlalchemy import select, insert
 from sqlalchemy.orm import Session
 
 from admin_service.core.security import get_password_hash
@@ -11,7 +12,9 @@ from .base import CRUDBase
 class CRUDUser(CRUDBase[Users, UserCreate, UserUpdate]):
     @staticmethod
     def get_by_email(db: Session, email: str) -> Users | None:
-        return db.query(Users).filter(Users.email == email).one_or_none()
+        return db.execute(
+            select(Users).where(Users.email == email)
+        ).scalar_one_or_none()
 
     def create(self, db: Session, obj_in: UserCreate) -> [Users, UsersDetails, Address]:
         hashed_password = get_password_hash(obj_in.password)
@@ -20,7 +23,7 @@ class CRUDUser(CRUDBase[Users, UserCreate, UserUpdate]):
             password=hashed_password,
             role=obj_in.role,
         )
-        db.add(user)
+        db.execute(insert(Users).values(**user.as_dict()))
         db.commit()
 
         address = Address(
@@ -31,7 +34,7 @@ class CRUDUser(CRUDBase[Users, UserCreate, UserUpdate]):
             postal_code=obj_in.postal_code,
             country=obj_in.country,
         )
-        db.add(address)
+        db.execute(insert(Address).values(**user.as_dict()))
         db.commit()
 
         user_details = UsersDetails(
@@ -41,7 +44,7 @@ class CRUDUser(CRUDBase[Users, UserCreate, UserUpdate]):
             surname=obj_in.surname,
             phone=obj_in.phone,
         )
-        db.add(user_details)
+        db.execute(insert(UsersDetails).values(**user.as_dict()))
         db.commit()
 
         return user, user_details, address

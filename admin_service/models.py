@@ -31,7 +31,7 @@ class Base(DeclarativeBase):
 class Users(Base):
     email: Mapped[str] = mapped_column(String(100))
     password: Mapped[str]
-    role: Mapped[str]
+    role: Mapped[str]  # todo: change to Enum
 
     orders: Mapped["Orders"] = relationship(back_populates="users")
     details: Mapped["UsersDetails"] = relationship(back_populates="users")

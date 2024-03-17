@@ -13,9 +13,9 @@ async def create_menu(menu_in: MenuCreate, db: DB, _: User):
     return crud_menu.create(db=db, obj_in=menu_in)
 
 
-@router.get("/{menu_id}", status_code=status.HTTP_200_OK, response_model=MenuRead)
-async def read_menu(menu_id: str, db: DB, _: User):
-    menu = crud_menu.get(db=db, id=menu_id)
+@router.get("/", status_code=status.HTTP_200_OK, response_model=list[MenuRead])
+def read_menu_all(db: DB, _: User):
+    menu = crud_menu.get_all(db=db)
     if not menu:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Menu not found"
@@ -23,9 +23,9 @@ async def read_menu(menu_id: str, db: DB, _: User):
     return menu
 
 
-@router.get("/", status_code=status.HTTP_200_OK, response_model=list[MenuRead])
-def read_menu_all(db: DB, _: User):
-    menu = crud_menu.get_all(db=db)
+@router.get("/{menu_id}", status_code=status.HTTP_200_OK, response_model=MenuRead)
+async def read_menu(menu_id: str, db: DB, _: User):
+    menu = crud_menu.get(db=db, id=menu_id)
     if not menu:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Menu not found"

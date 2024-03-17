@@ -3,6 +3,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from admin_service.api.deps import get_db
 from admin_service.crud.user import user as crud_admin
 from admin_service.schemas.internal.admin import AdminCreate
+from admin_service.utils.rabbitmq import RabbitMQPublisher
 
 router = APIRouter(prefix="/internal", tags=["internal"])
 
@@ -16,4 +17,6 @@ async def create_admin(admin_in: AdminCreate, db=Depends(get_db)):
         )
     crud_admin.create(db=db, obj_in=admin_in)
 
-    # TODO: Send email to the user.py to confirm the account
+    producer = RabbitMQPublisher()
+    producer.publish(admin_in.email, admin_in.first_email)
+    producer.close()
