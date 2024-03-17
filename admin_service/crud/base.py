@@ -1,6 +1,8 @@
+from fastapi import HTTPException, status
 from typing import Generic, Type, TypeVar
 
 from pydantic import BaseModel
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from sqlalchemy import select, update, delete, insert
 
@@ -41,8 +43,15 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return result.scalar_one()
 
     def remove(self, db: Session, id: str) -> ModelType:
-        result = db.execute(
-            delete(self.model).where(self.model.id == id).returning(self.model)
-        )
-        db.commit()
-        return result.scalar_one()
+        try:
+            result = db.execute(
+                delete(self.model).where(self.model.id == id).returning(self.model)
+            )
+            db.commit()
+            return result.scalar_one()
+        except IntegrityError:
+            db.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Cannot delete the record due to associated records in other tables.",
+            )
