@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import Literal
 from sqlalchemy.orm import Session
 from uuid import UUID
 from admin_service.models import (
