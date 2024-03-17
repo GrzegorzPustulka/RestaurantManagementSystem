@@ -32,6 +32,18 @@ def read_category_all(db: DB, _: User):
     return category
 
 
+@router.get(
+    "/{category_id}", status_code=status.HTTP_200_OK, response_model=CategoryRead
+)
+async def read_category(category_id: str, db: DB, _: User):
+    category = crud_category.get(db=db, id=category_id)
+    if not category:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Category not found"
+        )
+    return category
+
+
 @router.patch(
     "/{category_id}", status_code=status.HTTP_200_OK, response_model=CategoryRead
 )
