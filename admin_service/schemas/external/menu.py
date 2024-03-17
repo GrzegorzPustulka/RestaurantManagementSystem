@@ -5,12 +5,13 @@ from pydantic import BaseModel, field_validator
 
 class MenuBase(BaseModel):
     name: str
-    description: str | None
+    description: str | None = None
     price: float
-    category_id: UUID
 
 
 class MenuCreate(MenuBase):
+    category_id: UUID
+
     @field_validator("name")
     @classmethod
     def make_capitalize(cls, v: str) -> str:
@@ -23,9 +24,13 @@ class MenuCreate(MenuBase):
             return (v.capitalize()).rstrip(".") + "."
 
 
-class MenuUpdate(MenuBase):
-    pass
+class MenuUpdate(MenuCreate):
+    category_id: UUID | None = None
+
+    def model_dump(self, **kwargs) -> dict:
+        return {k: v for k, v in dict(self).items() if v is not None}
 
 
 class MenuRead(MenuBase):
     id: UUID
+    category_id: UUID

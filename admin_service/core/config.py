@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     POSTGRES_USER: str = "postgres"
     PGPASSWORD: SecretStr = SecretStr("SecretPassword_1!")
     PGHOST: str = "localhost"
-    PGPORT: str = "5432"
+    PGPORT: int = 5432
     PGDATABASE: str = "DineStream"
 
     @property

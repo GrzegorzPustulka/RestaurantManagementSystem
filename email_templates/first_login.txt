@@ -1,7 +1,0 @@
-Hello,
-
-Your account on DineStream has been created. To be able to use it, you must set your password.
-
-Please log in using the provided email address and follow this link to change your password at the first login: https://www.dinestream.com/change-password
-
-Thank you for using our service!"""
